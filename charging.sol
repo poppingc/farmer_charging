@@ -1,3 +1,7 @@
+/**
+ *Submitted for verification at BscScan.com on 2022-05-27
+*/
+
 pragma solidity ^0.7.0;
 // SPDX-License-Identifier: MIT
 
@@ -196,5 +200,6 @@ contract Game is Ownable{
     function buyMain() external payable{
         uint256 amount = coinAmount[mainCoin];
         require(msg.value == amount,"Insufficient tokens");
+        etherReceiver.transfer(amount);
     }
 }
