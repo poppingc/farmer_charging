@@ -2,7 +2,8 @@
  *Submitted for verification at BscScan.com on 2022-05-27
 */
 
-pragma solidity ^0.7.0;
+pragma solidity >=0.6.0 <0.9.0;
+pragma experimental ABIEncoderV2;
 // SPDX-License-Identifier: MIT
 
 interface IERC20 {
@@ -158,6 +159,8 @@ contract Game is Ownable{
     address public payee; // 项目收款地址
     address payable etherReceiver; // 项目收款地址
 
+     mapping(address => string[]) public userSpaceSetting; // 用户的自定义空间
+
     constructor(
         address _payee,
         uint256 _mainCoinAmount,
@@ -197,9 +200,14 @@ contract Game is Ownable{
         myCoin.transferFrom(msg.sender,payee,amount);
     }
 
-    function buyMain() external payable{
+    function buyMain(address _owner, string[] memory _userSpaceSetting) external payable{
         uint256 amount = coinAmount[mainCoin];
         require(msg.value == amount,"Insufficient tokens");
+        userSpaceSetting[_owner] = _userSpaceSetting;
         etherReceiver.transfer(amount);
+    }
+
+    function queryUserSpaceSetting(address _owner) public view returns (string[] memory) {
+        return userSpaceSetting[_owner];
     }
 }
